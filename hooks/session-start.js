@@ -48,9 +48,59 @@ async function main(input) {
     if (!fs.existsSync(geminiMdPath) && fs.existsSync(templatePath)) {
         try {
             fs.copyFileSync(templatePath, geminiMdPath);
-            initMessage = ' | 📄 GEMINI.md initialized from template';
+            initMessage += ' | 📄 GEMINI.md initialized';
         } catch (error) {
-            initMessage = ' | ⚠️ Failed to initialize GEMINI.md';
+            initMessage += ' | ⚠️ Failed to initialize GEMINI.md';
+        }
+    }
+
+    // Handle .geminiignore initialization
+    const ignorePath = path.join(projectDir, '.geminiignore');
+    if (!fs.existsSync(ignorePath)) {
+        const ignoreContent = `# Ignoring files
+
+This document provides an overview of the Gemini Ignore (\`.geminiignore\`)
+feature of the Gemini CLI.
+
+The Gemini CLI includes the ability to automatically ignore files, similar to
+\`.gitignore\` (used by Git) and \`.aiexclude\` (used by Gemini Code Assist). Adding
+paths to your \`.geminiignore\` file will exclude them from tools that support
+this feature, although they will still be visible to other services (such as
+Git).
+
+## How it works
+
+When you add a path to your \`.geminiignore\` file, tools that respect this file
+will exclude matching files and directories from their operations. For example,
+when you use the \`@\` command to share files, any paths in your \`.geminiignore\`
+file will be automatically excluded.
+
+## How to use \`.geminiignore\`
+
+1. Create a file named \`.geminiignore\` in the root of your project directory.
+
+### .geminiignore examples
+
+\`\`\`
+# Exclude your /packages/ directory and all subdirectories
+/packages/
+
+# Exclude all .md files except README.md
+*.md
+!README.md
+\`\`\`
+
+# Default project ignores
+.claude/*
+.tldr/*
+CLAUDE.md
+thoughts/*
+`;
+        try {
+            fs.writeFileSync(ignorePath, ignoreContent);
+            initMessage += ' | 🛡️ .geminiignore created';
+        } catch (error) {
+            initMessage += ' | ⚠️ Failed to create .geminiignore';
         }
     }
 
