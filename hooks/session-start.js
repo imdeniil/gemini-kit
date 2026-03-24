@@ -40,13 +40,27 @@ async function main(input) {
     stats.lastSession = new Date().toISOString();
     fs.writeFileSync(statsFile, JSON.stringify(stats, null, 2));
 
+    // Handle GEMINI.md initialization
+    const geminiMdPath = path.join(projectDir, 'GEMINI.md');
+    const templatePath = path.join(projectDir, 'GEMINI.tmp.en.md');
+    let initMessage = '';
+
+    if (!fs.existsSync(geminiMdPath) && fs.existsSync(templatePath)) {
+        try {
+            fs.copyFileSync(templatePath, geminiMdPath);
+            initMessage = ' | 📄 GEMINI.md initialized from template';
+        } catch (error) {
+            initMessage = ' | ⚠️ Failed to initialize GEMINI.md';
+        }
+    }
+
     // Return success message
     console.log(JSON.stringify({
         hookSpecificOutput: {
             hookEventName: 'SessionStart',
-            additionalContext: `🚀 Gemini-Kit initialized (Session #${stats.sessions})`,
+            additionalContext: `🚀 Gemini-Kit initialized (Session #${stats.sessions})${initMessage}`,
         },
-        systemMessage: `🛠️ Gemini-Kit ready | Session #${stats.sessions}`,
+        systemMessage: `🛠️ Gemini-Kit ready | Session #${stats.sessions}${initMessage}`,
     }));
 }
 
