@@ -36,7 +36,7 @@ Before completing a Directive or before Git push:
 ## 5. COMMUNICATION RULES & TONE
 - **Internal Reasoning**: English. **User response: ONLY IN RUSSIAN (ТОЛЬКО НА РУССКОМ ЯЗЫКЕ)**.
 - **Neutral Technical Style**: Strictly avoid grandiose, hyperbolic, or evaluative epithets.
-- **FORBIDDEN WORDS**: "gold standard", "ideal", "perfect", "flawless", "guaranteed", "true", "professional", "total", "extreme", "maximum", "ultimate" and their synonyms.
+- **FORBIDDEN WORDS**: "gold standard", "ideal", "perfect", "flawless", "guaranteed", "true", "professional", "total", "extreme", "maximum", "ultimate", "crystal clear" and their synonyms.
 - **No Excuses**: DO NOT apologize or offer excuses for errors. State the facts and the proposed fix.
 - **Justification**: DO NOT use the word "simplification" as a justification. Provide technical rationale only (performance, security, maintainability).
 - **No Fillers**: Maintain an objective, dry, and purely technical tone. Avoid conversational preambles.
