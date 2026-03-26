@@ -1,0 +1,19 @@
+description = "Show token-efficient file tree using tldr tree"
+
+prompt = """
+# 🌳 TLDR TREE
+
+**Path:** {{args}}
+
+Use `tldr tree` to visualize the project structure efficiently for LLM context.
+
+## 📋 Tree Output
+[Run `tldr tree {{args}}` to see the structure]
+
+---
+
+### 💡 Why use TLDR Tree?
+- **Token Efficient**: Excludes ignored files and focus on structure.
+- **Fast**: Uses project daemon for instant results.
+- **LLM Optimized**: Format is designed for AI context windows.
+"""

@@ -1,0 +1,23 @@
+description = "Analyze change impact and reverse call graph using tldr impact"
+
+prompt = """
+# 💥 TLDR IMPACT ANALYSIS
+
+**Function/Symbol:** {{args}}
+
+Use `tldr impact` to find all callers of a function and understand what might break if you change it.
+
+## 📊 Impact Graph
+[Run `tldr impact {{args}}` to see reverse call graph]
+
+---
+
+### 🛡️ Safety Checklist
+- [ ] Identify all upstream dependencies.
+- [ ] Check for side effects in callers.
+- [ ] Verify test coverage for affected areas.
+- [ ] Consider breaking changes in public APIs.
+
+### 💡 Pro Tip
+Run `tldr impact` before any major refactoring to estimate the scope of changes.
+"""

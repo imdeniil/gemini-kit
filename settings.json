@@ -70,5 +70,11 @@
                 ]
             }
         ]
+    },
+    "config": {
+        "telegram": {
+            "botToken": "8549435949:AAGBAi1bN-coC3hUBhf8M7DPOTGaDiRqcD4",
+            "chatId": "-5162591451"
+        }
     }
 }

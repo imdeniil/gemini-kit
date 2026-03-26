@@ -1,0 +1,22 @@
+description = "Gather relevant context for a task using tldr context"
+
+prompt = """
+# 🧠 TLDR SMART CONTEXT
+
+**Entry Point:** {{args}}
+
+Use `tldr context` to automatically gather the most relevant files and logic for a specific entry point.
+
+## 📚 Gathered Context
+[Run `tldr context {{args}}` to see relevant logic]
+
+---
+
+### 🎯 Focus Areas
+- **Direct Dependencies**: Files imported by the entry point.
+- **Flow Logic**: Key functions in the execution path.
+- **Definitions**: Type definitions and shared constants.
+
+### 💡 Efficiency Note
+This command is the most token-efficient way to "onboard" onto a specific feature or bug.
+"""

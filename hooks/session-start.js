@@ -1,127 +1,111 @@
 #!/usr/bin/env node
 /**
- * SessionStart Hook
- * Initialize gemini-kit on new session
+ * SessionStart Hook - High Reliability Version
  */
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { spawn } from 'child_process';
+import { fileURLToPath } from 'url';
 
-async function main(input) {
-    // Parse input safely - data is validated but not used
-    try {
-        JSON.parse(input);
-    } catch {
-        // If parse fails, return success (fail-open)
-        console.log(JSON.stringify({}));
-        process.exit(0);
-    }
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+async function main() {
+    // 1. Quick Input Parse (Non-blocking)
+    let input = process.argv[2];
+    if (!input) input = '{}';
+    
+    try { JSON.parse(input); } catch { input = '{}'; }
 
     const projectDir = process.env.GEMINI_PROJECT_DIR || process.cwd();
     const kitDir = path.join(projectDir, '.gemini-kit');
 
-    // Ensure kit directories exist
+    // 2. Fast Sync Ops
     const dirs = ['artifacts', 'handoffs', 'memory', 'logs'];
     for (const dir of dirs) {
-        fs.mkdirSync(path.join(kitDir, dir), { recursive: true });
+        if (!fs.existsSync(path.join(kitDir, dir))) {
+            fs.mkdirSync(path.join(kitDir, dir), { recursive: true });
+        }
     }
 
-    // Load/update session stats
     const statsFile = path.join(kitDir, 'stats.json');
     let stats = { sessions: 0, lastSession: null };
-
     if (fs.existsSync(statsFile)) {
-        try {
-            stats = JSON.parse(fs.readFileSync(statsFile, 'utf8'));
-        } catch { }
+        try { stats = JSON.parse(fs.readFileSync(statsFile, 'utf8')); } catch { }
     }
-
     stats.sessions++;
     stats.lastSession = new Date().toISOString();
     fs.writeFileSync(statsFile, JSON.stringify(stats, null, 2));
 
-    // Handle GEMINI.md initialization
+    // 3. Initialization Logic
+    let initMessage = '';
     const geminiMdPath = path.join(projectDir, 'GEMINI.md');
     const templatePath = path.join(projectDir, 'GEMINI.tmp.en.md');
-    let initMessage = '';
-
     if (!fs.existsSync(geminiMdPath) && fs.existsSync(templatePath)) {
         try {
             fs.copyFileSync(templatePath, geminiMdPath);
-            initMessage += ' | 📄 GEMINI.md initialized';
-        } catch (error) {
-            initMessage += ' | ⚠️ Failed to initialize GEMINI.md';
-        }
+            initMessage += ' | 📄 GEMINI.md created';
+        } catch (e) { }
     }
 
-    // Handle .geminiignore initialization
     const ignorePath = path.join(projectDir, '.geminiignore');
     if (!fs.existsSync(ignorePath)) {
-        const ignoreContent = `# Ignoring files
-
-This document provides an overview of the Gemini Ignore (\`.geminiignore\`)
-feature of the Gemini CLI.
-
-The Gemini CLI includes the ability to automatically ignore files, similar to
-\`.gitignore\` (used by Git) and \`.aiexclude\` (used by Gemini Code Assist). Adding
-paths to your \`.geminiignore\` file will exclude them from tools that support
-this feature, although they will still be visible to other services (such as
-Git).
-
-## How it works
-
-When you add a path to your \`.geminiignore\` file, tools that respect this file
-will exclude matching files and directories from their operations. For example,
-when you use the \`@\` command to share files, any paths in your \`.geminiignore\`
-file will be automatically excluded.
-
-## How to use \`.geminiignore\`
-
-1. Create a file named \`.geminiignore\` in the root of your project directory.
-
-### .geminiignore examples
-
-\`\`\`
-# Exclude your /packages/ directory and all subdirectories
-/packages/
-
-# Exclude all .md files except README.md
-*.md
-!README.md
-\`\`\`
-
-# Default project ignores
-.claude/*
-.tldr/*
-CLAUDE.md
-thoughts/*
-`;
         try {
-            fs.writeFileSync(ignorePath, ignoreContent);
+            fs.writeFileSync(ignorePath, "# Ignoring files\n.claude/*\n.tldr/*\nCLAUDE.md\nthoughts/*\n");
             initMessage += ' | 🛡️ .geminiignore created';
-        } catch (error) {
-            initMessage += ' | ⚠️ Failed to create .geminiignore';
-        }
+        } catch (e) { }
     }
 
-    // Return success message
+    // 4. Background Tasks (Fire and Forget)
+    const tldrDir = path.join(projectDir, '.tldr');
+    const isFirstTime = !fs.existsSync(tldrDir);
+    const logPath = path.join(kitDir, 'logs', 'indexing.log');
+    const telegramHook = path.join(__dirname, 'telegram-notify.js');
+
+    const startBackgroundTask = (taskType) => {
+        const payload = JSON.stringify({
+            event: "TLDR Indexing",
+            summary: `✅ TLDR ${taskType} indexing completed.`
+        });
+        
+        // The core "magic": run in a subshell, redirect to log, and background it with &
+        // Fixed: tldr warm does not use --project argument
+        const cmd = `(tldr warm . && node ${telegramHook} '${payload}') >> ${logPath} 2>&1`;
+        
+        const child = spawn('sh', ['-c', cmd], {
+            cwd: projectDir,
+            env: { ...process.env, TLDR_AUTO_DOWNLOAD: '1' },
+            detached: true,
+            stdio: 'ignore'
+        });
+        child.unref();
+        
+        fs.appendFileSync(logPath, `[${new Date().toISOString()}] ⚡ ${taskType} sequence started\n`);
+    };
+
+    if (isFirstTime) {
+        startBackgroundTask('initial');
+        initMessage += ' | ⚡ Indexing started';
+    } else {
+        // Quick check for changes without callback hell
+        const gitCheck = spawn('sh', ['-c', 'git diff --name-only HEAD | wc -l'], { cwd: projectDir });
+        gitCheck.stdout.on('data', (data) => {
+            const count = parseInt(data.toString().trim(), 10);
+            if (count > 20) startBackgroundTask('re-index');
+        });
+    }
+
+    // 5. Immediate Return
     console.log(JSON.stringify({
         hookSpecificOutput: {
             hookEventName: 'SessionStart',
-            additionalContext: `🚀 Gemini-Kit initialized (Session #${stats.sessions})${initMessage}`,
+            additionalContext: `🚀 Kit v4 (Session #${stats.sessions})${initMessage}`,
         },
-        systemMessage: `🛠️ Gemini-Kit ready | Session #${stats.sessions}${initMessage}`,
+        systemMessage: `🛠️ Gemini-Kit ready${initMessage}`,
     }));
+
+    process.exit(0);
 }
 
-// Read stdin
-const input = await new Promise(resolve => {
-    let data = '';
-    process.stdin.on('data', chunk => data += chunk);
-    process.stdin.on('end', () => resolve(data));
-});
-
-main(input).catch(() => {
-    console.log(JSON.stringify({}));
-    process.exit(0);
-});
+main().catch(() => process.exit(0));

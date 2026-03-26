@@ -1,0 +1,387 @@
+{
+  "edges": [
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "teamStatus",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "getCurrentSession"
+    },
+    {
+      "from_file": "src/tools/integration.ts",
+      "from_func": "extractAdfText",
+      "to_file": "src/tools/integration.ts",
+      "to_func": "extractText"
+    },
+    {
+      "from_file": "src/tools/integration.ts",
+      "from_func": "extractText",
+      "to_file": "src/tools/integration.ts",
+      "to_func": "extractText"
+    },
+    {
+      "from_file": "src/tools/team-state.ts",
+      "from_func": "saveSession",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "saveSessionSync"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "advanceStep",
+      "to_file": "src/tools/orchestrator.ts",
+      "to_func": "getTypedContext"
+    },
+    {
+      "from_file": "src/tools/security.ts",
+      "from_func": "safeGh",
+      "to_file": "src/tools/security.ts",
+      "to_func": "extractStderr"
+    },
+    {
+      "from_file": "src/tools/core.ts",
+      "from_func": "registerCoreTools",
+      "to_file": "src/tools/security.ts",
+      "to_func": "safeGit"
+    },
+    {
+      "from_file": "src/tools/team-state.ts",
+      "from_func": "addAgentResult",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "saveSession"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "runWorkflow",
+      "to_file": "src/tools/workflows.ts",
+      "to_func": "listWorkflows"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "executeStep",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "addAgentResult"
+    },
+    {
+      "from_file": "src/tools/integration.ts",
+      "from_func": "registerIntegrationTools",
+      "to_file": "src/tools/integration.ts",
+      "to_func": "extractAdfText"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "teamEnd",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "endSession"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "teamStart",
+      "to_file": "src/tools/workflows.ts",
+      "to_func": "listWorkflows"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "teamStart",
+      "to_file": "src/tools/workflows.ts",
+      "to_func": "autoSelectWorkflow"
+    },
+    {
+      "from_file": "src/tools/integration.ts",
+      "from_func": "registerIntegrationTools",
+      "to_file": "src/tools/security.ts",
+      "to_func": "safeGh"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "teamEnd",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "getSessionSummary"
+    },
+    {
+      "from_file": "src/tools/team-state.ts",
+      "from_func": "startSession",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "saveSession"
+    },
+    {
+      "from_file": "src/tools/team-state.ts",
+      "from_func": "recoverActiveSession",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "setActiveSessionPointer"
+    },
+    {
+      "from_file": "src/tools/team-state.ts",
+      "from_func": "endSession",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "setActiveSessionPointer"
+    },
+    {
+      "from_file": "src/tools/team-state.ts",
+      "from_func": "incrementRetry",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "saveSession"
+    },
+    {
+      "from_file": "src/tools/integration.ts",
+      "from_func": "registerIntegrationTools",
+      "to_file": "src/tools/security.ts",
+      "to_func": "sanitize"
+    },
+    {
+      "from_file": "src/tools/team-state.ts",
+      "from_func": "saveSession",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "debouncedSave"
+    },
+    {
+      "from_file": "src/tools/team-state.ts",
+      "from_func": "gracefulShutdown",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "saveSessionSync"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "teamStatus",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "getSessionSummary"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "getNextStep",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "getCurrentSession"
+    },
+    {
+      "from_file": "src/tools/security.ts",
+      "from_func": "safeGit",
+      "to_file": "src/tools/security.ts",
+      "to_func": "extractStderr"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "handleStepFailure",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "getCurrentSession"
+    },
+    {
+      "from_file": "src/tools/core.ts",
+      "from_func": "registerCoreTools",
+      "to_file": "src/tools/config.ts",
+      "to_func": "getFileExtensions"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "advanceStep",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "updateContext"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "getNextStep",
+      "to_file": "src/tools/workflows.ts",
+      "to_func": "getWorkflow"
+    },
+    {
+      "from_file": "src/tools/git.ts",
+      "from_func": "registerGitTools",
+      "to_file": "src/tools/security.ts",
+      "to_func": "sanitize"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "initOrchestrator",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "initTeamState"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "executeStep",
+      "to_file": "src/tools/workflows.ts",
+      "to_func": "getStepPrompt"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "executeStep",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "getCurrentSession"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "handleStepFailure",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "addAgentResult"
+    },
+    {
+      "from_file": "src/tools/knowledge.ts",
+      "from_func": "registerKnowledgeTools",
+      "to_file": "src/tools/security.ts",
+      "to_func": "findFilesAsync"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "runWorkflow",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "updateContext"
+    },
+    {
+      "from_file": "src/tools/team-state.ts",
+      "from_func": "initTeamState",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "recoverActiveSession"
+    },
+    {
+      "from_file": "src/tools/team-state.ts",
+      "from_func": "flushSession",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "saveSessionSync"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "getNextStep",
+      "to_file": "src/tools/orchestrator.ts",
+      "to_func": "getTypedContext"
+    },
+    {
+      "from_file": "src/tools/team-state.ts",
+      "from_func": "endSession",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "saveSession"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "handleStepFailure",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "incrementRetry"
+    },
+    {
+      "from_file": "src/tools/integration.ts",
+      "from_func": "registerIntegrationTools",
+      "to_file": "src/tools/security.ts",
+      "to_func": "commandExists"
+    },
+    {
+      "from_file": "src/tools/git.ts",
+      "from_func": "registerGitTools",
+      "to_file": "src/tools/security.ts",
+      "to_func": "safeGit"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "advanceStep",
+      "to_file": "src/tools/workflows.ts",
+      "to_func": "getWorkflow"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "advanceStep",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "getCurrentSession"
+    },
+    {
+      "from_file": "src/tools/knowledge.ts",
+      "from_func": "registerKnowledgeTools",
+      "to_file": "src/tools/security.ts",
+      "to_func": "validatePath"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "getSessionHistory",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "listSessions"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "runWorkflow",
+      "to_file": "src/tools/workflows.ts",
+      "to_func": "getWorkflow"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "smartRoute",
+      "to_file": "src/tools/workflows.ts",
+      "to_func": "listWorkflows"
+    },
+    {
+      "from_file": "src/tools/team-state.ts",
+      "from_func": "startSession",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "setActiveSessionPointer"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "runWorkflow",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "getCurrentSession"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "runWorkflow",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "startSession"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "getNextStep",
+      "to_file": "src/tools/workflows.ts",
+      "to_func": "getStepPrompt"
+    },
+    {
+      "from_file": "src/tools/team-state.ts",
+      "from_func": "initTeamState",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "gracefulShutdown"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "advanceStep",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "addAgentResult"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "handleStepFailure",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "canRetry"
+    },
+    {
+      "from_file": "src/tools/team-state.ts",
+      "from_func": "updateContext",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "saveSession"
+    },
+    {
+      "from_file": "src/tools/config.ts",
+      "from_func": "getFileExtensions",
+      "to_file": "src/tools/config.ts",
+      "to_func": "loadProjectSettings"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "teamStart",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "startSession"
+    },
+    {
+      "from_file": "src/tools/core.ts",
+      "from_func": "registerCoreTools",
+      "to_file": "src/tools/security.ts",
+      "to_func": "findFilesAsync"
+    },
+    {
+      "from_file": "src/tools/orchestrator.ts",
+      "from_func": "smartRoute",
+      "to_file": "src/tools/workflows.ts",
+      "to_func": "autoSelectWorkflow"
+    },
+    {
+      "from_file": "src/tools/team-state.ts",
+      "from_func": "recoverActiveSession",
+      "to_file": "src/tools/team-state.ts",
+      "to_func": "getActiveSessionPointer"
+    }
+  ],
+  "languages": [
+    "javascript",
+    "typescript"
+  ],
+  "timestamp": 1774473645.9347625
+}

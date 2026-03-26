@@ -1,0 +1,5 @@
+# Ignoring files
+.claude/*
+.tldr/*
+CLAUDE.md
+thoughts/*

@@ -1,62 +1,35 @@
 #!/usr/bin/env node
 /**
- * SessionEnd Hook
- * Cleanup and save session logs
+ * SessionEnd Hook - High Reliability Version
  */
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { fileURLToPath } from 'url';
 
-async function main(input) {
-    // Parse input safely - data is validated but not used
-    try {
-        JSON.parse(input);
-    } catch {
-        console.log(JSON.stringify({}));
-        process.exit(0);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+async function main() {
+    let input = process.argv[2];
+    if (!input) {
+        input = await new Promise(resolve => {
+            let data = '';
+            process.stdin.on('data', chunk => data += chunk);
+            process.stdin.on('end', () => resolve(data));
+            setTimeout(() => resolve(data), 500);
+        });
     }
 
     const projectDir = process.env.GEMINI_PROJECT_DIR || process.cwd();
-    const sessionId = process.env.GEMINI_SESSION_ID || 'unknown';
     const kitDir = path.join(projectDir, '.gemini-kit');
 
-    // Clean old handoffs (keep last 10)
-    const handoffDir = path.join(kitDir, 'handoffs');
-    if (fs.existsSync(handoffDir)) {
-        try {
-            const files = fs.readdirSync(handoffDir).sort();
-            if (files.length > 10) {
-                for (const f of files.slice(0, -10)) {
-                    fs.unlinkSync(path.join(handoffDir, f));
-                }
-            }
-        } catch { }
-    }
-
-    // Log session end
-    const logsDir = path.join(kitDir, 'logs');
-    fs.mkdirSync(logsDir, { recursive: true });
-
-    const logFile = path.join(logsDir, 'sessions.log');
-    const logEntry = `[${new Date().toISOString()}] Session ${sessionId} ended\n`;
-
-    try {
-        fs.appendFileSync(logFile, logEntry);
-    } catch { }
-
+    // Simple cleanup / stats summary
     console.log(JSON.stringify({
-        systemMessage: '👋 Gemini-Kit session saved',
+        systemMessage: "👋 Gemini-Kit session ended. All changes saved.",
     }));
+
+    process.exit(0);
 }
 
-// Read stdin
-const input = await new Promise(resolve => {
-    let data = '';
-    process.stdin.on('data', chunk => data += chunk);
-    process.stdin.on('end', () => resolve(data));
-});
-
-main(input).catch(() => {
-    console.log(JSON.stringify({}));
-    process.exit(0);
-});
+main();

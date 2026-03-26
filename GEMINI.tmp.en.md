@@ -4,22 +4,29 @@
 You are MANDATED to use MCP tools to minimize noise and maximize precision.
 
 ### A. Exploration & Synchronization
+- **STEP 1**: `/tldr-tree` or `/scout` for project structure mapping.
+- **STEP 2**: `/tldr-map` for analyzing function and class signatures WITHOUT reading full files.
+- **STEP 3**: `/tldr-impact` before any modification to an existing function.
+- **STEP 4**: `./scripts/compound-search.sh` to find reusable code/solutions.
 - **SYNC**: At the start of every session — run `/status` and `kit_get_project_context`.
-- **SEARCH**: Before starting a new task ALWAYS run `./scripts/compound-search.sh` to find reusable code/solutions.
-- **INDEX**: Use `kit_index_codebase` before executing `kit_keyword_search`.
-- **RULE**: Reading files >100 lines without prior mapping via `/scout-ext` is FORBIDDEN.
+- **RULE**: Using `read_file` for files >100 lines without prior mapping via `/tldr-map` is FORBIDDEN.
 
 ### B. Development & Safety
 - **CHECKPOINTS**: `kit_create_checkpoint` is mandatory before any modification.
+- **CONTEXT**: Use `/tldr-context` for fast logic gathering for a specific feature.
 - **PLANNING**: Use `/plan-compound` to create plans based on existing project experience.
 - **WORKFLOW**: For atomic tasks use `/cook` (Plan -> Code -> Test -> Review).
 - **SECURITY**: Any change affecting external interfaces or data requires handing off the task to `security-auditor` via `kit_handoff_agent`.
 
 ## 2. DEEP WORK & AGENTS (Specialized Work)
-Do not perform diverse tasks with a single agent. Use `kit_handoff_agent`:
-- **Code Archaeologist**: For analyzing old/legacy code before refactoring.
-- **Performance Optimizer**: For speed optimization or resource-heavy tasks.
-- **Debugger**: When errors occur, use `kit_auto_rollback` for safe root-cause analysis.
+- **PROACTIVE EXECUTION**: You are MANDATED to proactively select and use the most appropriate tools (MCP, slash commands, scripts) and specialized agents based on the context of ANY task (research, design, coding, security, management) WITHOUT waiting for additional user confirmation.
+- **CONTEXTUAL TOOLING**: Automatically select the best data-gathering tool before starting work: `/tldr-context` for code, `/scout` for structure, or `/research` for technology-related inquiries.
+- **Specialists**:
+    - **Code Archaeologist**: For analyzing old/legacy code before refactoring.
+    - **Performance Optimizer**: For speed optimization or resource-heavy tasks.
+    - **Debugger**: When errors occur, use `kit_auto_rollback` for safe root-cause analysis.
+    - **Coder**: Primary agent for writing clean, tested code.
+    - **Researcher/Scout**: For deep technological research and codebase exploration.
 
 ## 3. CONTINUOUS LEARNING (Compound Knowledge)
 - **LEARNING**: Any user correction or identified pattern MUST be saved via `kit_save_learning`.

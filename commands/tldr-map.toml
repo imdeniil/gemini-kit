@@ -1,0 +1,22 @@
+description = "Show code structure (codemaps) using tldr structure"
+
+prompt = """
+# 🗺️ TLDR CODE MAP
+
+**Target:** {{args}}
+
+Use `tldr structure` to map symbols, classes, and function signatures without reading full files.
+
+## 🧩 Structure Map
+[Run `tldr structure {{args}}` to see signatures]
+
+---
+
+### 🔍 Analysis Levels
+- **Functions**: Identify entry points and logic blocks.
+- **Classes**: Understand data structures and inheritance.
+- **Signatures**: See parameters and return types without implementation noise.
+
+### 💡 Usage Tip
+Always run this BEFORE `read_file` for large files to identify exact lines of interest.
+"""
