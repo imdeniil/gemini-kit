@@ -69,9 +69,10 @@ async function main() {
             summary: `✅ TLDR ${taskType} indexing completed.`
         });
         
-        // The core "magic": run in a subshell, redirect to log, and background it with &
-        // Fixed: tldr warm does not use --project argument
-        const cmd = `(tldr warm . && node ${telegramHook} '${payload}') >> ${logPath} 2>&1`;
+        // Use absolute path to the wrapper script to ensure paths are correct
+        const wrapperPath = path.join(__dirname, '..', 'scripts', 'tldr-wrapper.sh');
+        
+        const cmd = `(${wrapperPath} warm . && node ${telegramHook} '${payload}') >> ${logPath} 2>&1`;
         
         const child = spawn('sh', ['-c', cmd], {
             cwd: projectDir,

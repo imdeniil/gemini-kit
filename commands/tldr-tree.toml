@@ -8,7 +8,7 @@ prompt = """
 Use `tldr tree` to visualize the project structure efficiently for LLM context.
 
 ## 📋 Tree Output
-[Run `tldr tree {{args}}` to see the structure]
+[Run `./scripts/tldr-wrapper.sh tree {{args}}` to see the structure]
 
 ---
 

@@ -5,10 +5,11 @@ prompt = """
 
 **Entry Point:** {{args}}
 
-Use `tldr context` to automatically gather the most relevant files and logic for a specific entry point.
+Use `tldr context` to gather relevant files and logic.
+You can specify a language as a second argument (e.g., `/tldr-context main python`).
 
 ## 📚 Gathered Context
-[Run `tldr context {{args}}` to see relevant logic]
+[Run `./scripts/tldr-wrapper.sh context {{args}}` to see relevant logic. If args contains a space, use the second part as --lang]
 
 ---
 

@@ -5,10 +5,11 @@ prompt = """
 
 **Target:** {{args}}
 
-Use `tldr structure` to map symbols, classes, and function signatures without reading full files.
+Use `tldr structure` to map symbols, classes, and function signatures. 
+If a second argument is provided, use it as the language (e.g., `/tldr-map . php`).
 
 ## 🧩 Structure Map
-[Run `tldr structure {{args}}` to see signatures]
+[Run `./scripts/tldr-wrapper.sh structure {{args}}` to see signatures. If args contains a space, the second part is the language, e.g. `structure path --lang lang`]
 
 ---
 
