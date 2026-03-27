@@ -1,33 +1,28 @@
 #!/usr/bin/env node
 /**
- * SessionStart Hook - High Reliability Version
+ * SessionStart Hook - Fixed Detachment Version
  */
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { spawn } from 'child_process';
+import { exec, spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 async function main() {
-    // 1. Quick Input Parse (Non-blocking)
-    let input = process.argv[2];
-    if (!input) input = '{}';
-    
+    let input = process.argv[2] || '{}';
     try { JSON.parse(input); } catch { input = '{}'; }
 
     const projectDir = process.env.GEMINI_PROJECT_DIR || process.cwd();
     const kitDir = path.join(projectDir, '.gemini-kit');
 
-    // 2. Fast Sync Ops
-    const dirs = ['artifacts', 'handoffs', 'memory', 'logs'];
-    for (const dir of dirs) {
-        if (!fs.existsSync(path.join(kitDir, dir))) {
-            fs.mkdirSync(path.join(kitDir, dir), { recursive: true });
-        }
-    }
+    // Ensure kit directories
+    ['artifacts', 'handoffs', 'memory', 'logs'].forEach(dir => {
+        const d = path.join(kitDir, dir);
+        if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
+    });
 
     const statsFile = path.join(kitDir, 'stats.json');
     let stats = { sessions: 0, lastSession: null };
@@ -38,13 +33,13 @@ async function main() {
     stats.lastSession = new Date().toISOString();
     fs.writeFileSync(statsFile, JSON.stringify(stats, null, 2));
 
-    // 3. Initialization Logic
+    // Initialization Logic
     let initMessage = '';
-    const geminiMdPath = path.join(projectDir, 'GEMINI.md');
-    // Get extension root where templates are stored
     const extensionRootDir = path.join(__dirname, '..');
+    
+    // GEMINI.md
+    const geminiMdPath = path.join(projectDir, 'GEMINI.md');
     const templatePath = path.join(extensionRootDir, 'GEMINI.tmp.en.md');
-
     if (!fs.existsSync(geminiMdPath) && fs.existsSync(templatePath)) {
         try {
             fs.copyFileSync(templatePath, geminiMdPath);
@@ -52,6 +47,7 @@ async function main() {
         } catch (e) { }
     }
 
+    // .geminiignore
     const ignorePath = path.join(projectDir, '.geminiignore');
     if (!fs.existsSync(ignorePath)) {
         try {
@@ -60,47 +56,40 @@ async function main() {
         } catch (e) { }
     }
 
-    // 4. Background Tasks (Fire and Forget)
+    // Background TLDR Indexing
     const tldrDir = path.join(projectDir, '.tldr');
     const isFirstTime = !fs.existsSync(tldrDir);
     const logPath = path.join(kitDir, 'logs', 'indexing.log');
     const telegramHook = path.join(__dirname, 'telegram-notify.js');
+    const wrapperPath = path.join(extensionRootDir, 'scripts', 'tldr-wrapper.sh');
 
-    const startBackgroundTask = (taskType) => {
+    const triggerIndexing = (type) => {
         const payload = JSON.stringify({
             event: "TLDR Indexing",
-            summary: `✅ TLDR ${taskType} indexing completed.`
+            summary: `✅ TLDR ${type} indexing completed for ${path.basename(projectDir)}.`
         });
         
-        // Use absolute path to the wrapper script to ensure paths are correct
-        const wrapperPath = path.join(__dirname, '..', 'scripts', 'tldr-wrapper.sh');
+        // IMPORTANT: We use a subshell with nohup and & to ensure it survives parent exit.
+        // We also use absolute paths for everything.
+        const cmd = `nohup sh -c "(${wrapperPath} warm . && node ${telegramHook} '${payload}') >> ${logPath} 2>&1" > /dev/null 2>&1 &`;
         
-        const cmd = `(${wrapperPath} warm . && node ${telegramHook} '${payload}') >> ${logPath} 2>&1`;
-        
-        const child = spawn('sh', ['-c', cmd], {
-            cwd: projectDir,
-            env: { ...process.env, TLDR_AUTO_DOWNLOAD: '1' },
-            detached: true,
-            stdio: 'ignore'
-        });
-        child.unref();
-        
-        fs.appendFileSync(logPath, `[${new Date().toISOString()}] ⚡ ${taskType} sequence started\n`);
+        exec(cmd, { cwd: projectDir, env: { ...process.env, TLDR_AUTO_DOWNLOAD: '1' } });
+        fs.appendFileSync(logPath, `[${new Date().toISOString()}] ⚡ ${type} indexing triggered\n`);
     };
 
     if (isFirstTime) {
-        startBackgroundTask('initial');
+        triggerIndexing('initial');
         initMessage += ' | ⚡ Indexing started';
     } else {
-        // Quick check for changes without callback hell
+        // Only re-index if more than 20 files changed
         const gitCheck = spawn('sh', ['-c', 'git diff --name-only HEAD | wc -l'], { cwd: projectDir });
         gitCheck.stdout.on('data', (data) => {
             const count = parseInt(data.toString().trim(), 10);
-            if (count > 20) startBackgroundTask('re-index');
+            if (count > 20) triggerIndexing('re-index');
         });
     }
 
-    // 5. Immediate Return
+    // Immediate Return to CLI
     console.log(JSON.stringify({
         hookSpecificOutput: {
             hookEventName: 'SessionStart',
@@ -109,7 +98,8 @@ async function main() {
         systemMessage: `🛠️ Gemini-Kit ready${initMessage}`,
     }));
 
-    process.exit(0);
+    // Wait a tiny bit to ensure the detached process is handed off to OS
+    setTimeout(() => process.exit(0), 100);
 }
 
 main().catch(() => process.exit(0));
