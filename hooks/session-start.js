@@ -41,7 +41,10 @@ async function main() {
     // 3. Initialization Logic
     let initMessage = '';
     const geminiMdPath = path.join(projectDir, 'GEMINI.md');
-    const templatePath = path.join(projectDir, 'GEMINI.tmp.en.md');
+    // Get extension root where templates are stored
+    const extensionRootDir = path.join(__dirname, '..');
+    const templatePath = path.join(extensionRootDir, 'GEMINI.tmp.en.md');
+
     if (!fs.existsSync(geminiMdPath) && fs.existsSync(templatePath)) {
         try {
             fs.copyFileSync(templatePath, geminiMdPath);
