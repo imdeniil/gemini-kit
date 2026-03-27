@@ -21,6 +21,7 @@ You are MANDATED to use MCP tools to minimize noise and maximize precision.
 ## 2. DEEP WORK & AGENTS (Specialized Work)
 - **PROACTIVE EXECUTION**: You are MANDATED to proactively select and use the most appropriate tools (MCP, slash commands, scripts) and specialized agents based on the context of ANY task (research, design, coding, security, management) WITHOUT waiting for additional user confirmation.
 - **CONTEXTUAL TOOLING**: Automatically select the best data-gathering tool before starting work: `/tldr-context` for code, `/scout` for structure, or `/research` for technology-related inquiries.
+- **AUTO LANGUAGE DETECTION**: Before invoking `tldr`, you MUST proactively identify the primary language(s) of the project/file by inspecting configuration files (`package.json`, `composer.json`, etc.) and explicitly pass it to `tldr` commands (e.g., `/tldr-map . php`).
 - **Specialists**:
     - **Code Archaeologist**: For analyzing old/legacy code before refactoring.
     - **Performance Optimizer**: For speed optimization or resource-heavy tasks.
